@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'dart:async';
-import 'dart:convert';
-import '../common/global.dart';
+import '../store/global.dart';
 
 Dio $http = Dio(
   BaseOptions(

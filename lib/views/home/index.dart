@@ -43,8 +43,10 @@ class _FeedListHomePageState extends State<FeedListHomePage>
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if ((snapshot.connectionState == ConnectionState.done)) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text("Error: ${snapshot.error}"),
+              return Scaffold(
+                body: Center(
+                  child: Text("Error: ${snapshot.error}"),
+                ),
               );
             } else {
               return Scaffold(
@@ -73,7 +75,6 @@ class _FeedListHomePageState extends State<FeedListHomePage>
                       ),
                     ),
                   ),
-                  // ),
                 ),
                 body: TabBarView(
                   controller: _tabController,

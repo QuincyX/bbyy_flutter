@@ -39,17 +39,17 @@ class FeedItemCard extends StatefulWidget {
   final String topicName;
   final int type;
   final int topicId;
-  int digCount;
-  int buryCount;
-  int shareCount;
-  int markCount;
+  final int digCount;
+  final int buryCount;
+  final int shareCount;
+  final int markCount;
   final int commentCount;
   final List imageList;
-  bool isFollow;
-  bool isMark;
-  bool isDig;
-  bool isBury;
-  User user;
+  final bool isFollow;
+  final bool isMark;
+  final bool isDig;
+  final bool isBury;
+  final User user;
 
   @override
   FeedItemCardState createState() => FeedItemCardState();
@@ -57,9 +57,14 @@ class FeedItemCard extends StatefulWidget {
 
 class FeedItemCardState extends State<FeedItemCard> {
   VideoPlayerController _videoController;
+  int _digCount = 0;
+
   @override
   void initState() {
     super.initState();
+
+    _digCount = widget.digCount;
+
     _videoController = VideoPlayerController.network(
         'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
       ..initialize().then((_) {
@@ -68,10 +73,9 @@ class FeedItemCardState extends State<FeedItemCard> {
       });
   }
 
-  int _starCount = 0;
-  void _handleClick() {
+  void _handleClickDig() {
     setState(() {
-      _starCount++;
+      _digCount++;
     });
   }
 
@@ -94,6 +98,7 @@ class FeedItemCardState extends State<FeedItemCard> {
                   margin: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    color: Colors.yellow[200],
                     image: DecorationImage(
                       image: widget.user.avatar == null
                           ? AssetImage(
@@ -108,34 +113,14 @@ class FeedItemCardState extends State<FeedItemCard> {
               ),
               Expanded(
                 flex: 1,
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: <Widget>[
-                    Container(
-                      height: 25,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.user.nickName,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.user.nickName,
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    Container(
-                      height: 25,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          widget.content,
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
               Expanded(
@@ -145,11 +130,9 @@ class FeedItemCardState extends State<FeedItemCard> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.star),
-                        color: Colors.red[500],
-                        onPressed: _handleClick,
+                        icon: Icon(Icons.arrow_drop_down),
+                        onPressed: _handleClickDig,
                       ),
-                      Text(widget.markCount.toString()),
                     ],
                   ),
                 ),
@@ -157,26 +140,30 @@ class FeedItemCardState extends State<FeedItemCard> {
             ],
           ),
           Container(
-            child: Text(widget.content),
+            child: Offstage(
+              offstage: widget.content == '',
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    "/feed/detail",
+                    arguments: {"id": widget.id},
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(widget.content),
+                  ),
+                ),
+              ),
+            ),
           ),
           Container(
             child: Image(
               image: NetworkImage(widget.videoPoster),
             ),
           ),
-          // Container(
-          //   child: _videoController.value.initialized
-          //       ? AspectRatio(
-          //           aspectRatio: _videoController.value.aspectRatio,
-          //           child: VideoPlayer(_videoController),
-          //         )
-          //       : Container(
-          //           height: 400,
-          //           decoration: BoxDecoration(
-          //             color: Colors.black,
-          //           ),
-          //         ),
-          // ),
           Flex(
             direction: Axis.horizontal,
             children: <Widget>[
@@ -188,9 +175,9 @@ class FeedItemCardState extends State<FeedItemCard> {
                     IconButton(
                       icon: Icon(Icons.thumb_up),
                       color: Colors.red[500],
-                      onPressed: _handleClick,
+                      onPressed: _handleClickDig,
                     ),
-                    Text('2'),
+                    Text(_digCount.toString()),
                   ],
                 ),
               ),
@@ -202,7 +189,7 @@ class FeedItemCardState extends State<FeedItemCard> {
                     IconButton(
                       icon: Icon(Icons.thumb_down),
                       color: Colors.red[500],
-                      onPressed: _handleClick,
+                      onPressed: _handleClickDig,
                     ),
                     Text('踩'),
                   ],
@@ -216,7 +203,12 @@ class FeedItemCardState extends State<FeedItemCard> {
                     IconButton(
                       icon: Icon(Icons.sms),
                       color: Colors.red[500],
-                      onPressed: _handleClick,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          "/feed/detail",
+                          arguments: {"id": widget.id},
+                        );
+                      },
                     ),
                     Text('2'),
                   ],
@@ -230,9 +222,9 @@ class FeedItemCardState extends State<FeedItemCard> {
                     IconButton(
                       icon: Icon(Icons.share),
                       color: Colors.red[500],
-                      onPressed: _handleClick,
+                      onPressed: _handleClickDig,
                     ),
-                    Text('2'),
+                    Text("3"),
                   ],
                 ),
               ),
@@ -309,7 +301,7 @@ class TestFlowDelegate extends FlowDelegate {
   void paintChildren(FlowPaintingContext context) {
     var x = margin.left;
     var y = margin.top;
-    //计算每一个子widget的位置
+    //计算每一个子widget的位��
     for (int i = 0; i < context.childCount; i++) {
       var w = context.getChildSize(i).width + x + margin.right;
       if (w < context.size.width) {

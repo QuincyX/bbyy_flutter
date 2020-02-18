@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './plugins/dio.dart';
-import './common/global.dart';
+import './store/global.dart';
 import './views/home/index.dart' show FeedListHomePage;
+import './views/feed/detail.dart' show FeedDetailPage;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/": (context) => FeedListHomePage(title: 'BY live demo home page'),
-        "feed_recommends": (context) =>
-            FeedListHomePage(title: 'BY live demo home /recommends'),
+        "/feed/detail": (context) => FeedDetailPage(),
         "feed_follow": (context) =>
             FeedListHomePage(title: 'BY live demo home /follow'),
         "feed_lastest": (context) =>

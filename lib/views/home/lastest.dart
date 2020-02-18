@@ -13,14 +13,10 @@ class _LastestFeedListState extends State<LastestFeedList> {
   List list;
   Future getData() async {
     Response response = await $http.get(
-        "major-service/major/v1/post/newest?timeline=0&count=6",
-        queryParameters: {"timeline": 0, "count": 10});
+      "major-service/major/v1/post/newest",
+      queryParameters: {"timeline": 0, "count": 10},
+    );
     list = response.data['data']['list'];
-  }
-
-  @override
-  void initState() {
-    setState(() {});
   }
 
   @override

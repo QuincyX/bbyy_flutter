@@ -14,14 +14,10 @@ class _TagFeedListState extends State<TagFeedList> {
   List list;
   Future getData() async {
     Response response = await $http.get(
-        "major-service/major/v1/post/tag/${widget.tagId}?timeline=0&count=6",
-        queryParameters: {"timeline": 0, "count": 10});
+      "major-service/major/v1/post/tag/${widget.tagId}",
+      queryParameters: {"timeline": 0, "count": 10},
+    );
     list = response.data['data']['list'];
-  }
-
-  @override
-  void initState() {
-    setState(() {});
   }
 
   @override
