@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../conponents/feedItemCard.dart';
-import '../../plugins/dio.dart';
+import 'package:by_flutter/conponents/feedItemCard.dart';
+import 'package:by_flutter/plugins/dio.dart';
+import 'package:by_flutter/models/user.dart';
 
 class TagFeedList extends StatefulWidget {
   TagFeedList({Key key, this.tagId}) : super(key: key);

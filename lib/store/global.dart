@@ -1,3 +1,9 @@
+/*
+ * @Date: 2020-02-18 10:47:41
+ * @LastEditors: Quincy
+ * @LastEditTime: 2020-02-19 09:26:25
+ * @Description: glabal variable
+ */
 import 'package:dio/dio.dart';
 import '../plugins/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';

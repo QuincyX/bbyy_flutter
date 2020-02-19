@@ -1,3 +1,9 @@
+/*
+ * @Date: 2020-02-14 17:36:49
+ * @LastEditors: Quincy
+ * @LastEditTime: 2020-02-19 09:48:18
+ * @Description: http request adapter
+ */
 import 'package:dio/dio.dart';
 import 'dart:async';
 import '../store/global.dart';
@@ -33,14 +39,15 @@ class CommonInterceptor extends InterceptorsWrapper {
       Global.setJwtToken(response.headers['jwt-token'][0]);
     }
     // if (response.data['data']['list'] != null) {
-    //   return ResponseWithList(
-    //     list: response.data['data']['list'],
-    //     page: ResponsePage(
-    //       timeline: response.data['data']['timeline'],
-    //     ),
-    //   );
-    // } else {
-    //   return response.data['data']['data'];
+    //   response.extra['list'] = response.data['data']['list'];
+    //   response.extra['page'] = {
+    //     "timeline": response.data['data']['timeline'],
+    //     "count": response.data['data']['count'],
+    //     // "finish": (response.data['data']['hasNext'] == '1') ? true : false,
+    //   };
+    // }
+    // if (response.data['data']['data'] != null) {
+    //   response.extra['data'] = response.data['data']['data'];
     // }
     return super.onResponse(response);
   }
@@ -56,13 +63,19 @@ class CommonInterceptor extends InterceptorsWrapper {
   }
 }
 
-class ResponseWithList {
-  ResponseWithList({this.list, this.page});
+class ResponseList {
+  ResponseList({this.list, this.page});
   List list;
   ResponsePage page;
 }
 
 class ResponsePage {
-  ResponsePage({this.timeline});
+  ResponsePage({this.timeline, this.count, this.finish});
   int timeline;
+  int count;
+  bool finish;
+}
+
+class ResponseData {
+  ResponseData();
 }

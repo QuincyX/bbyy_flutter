@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../plugins/dio.dart' show $http;
-import './recommends.dart' show RecommendsFeedList;
-import './follow.dart' show FollowFeedList;
-import './lastest.dart' show LastestFeedList;
-import './tag.dart' show TagFeedList;
+import 'package:flutter_redux/flutter_redux.dart';
+
+import 'package:by_flutter/plugins/dio.dart' show $http;
+import 'package:by_flutter/store/index.dart';
+import 'package:by_flutter/views/home/recommends.dart' show RecommendsFeedList;
+import 'package:by_flutter/views/home/follow.dart' show FollowFeedList;
+import 'package:by_flutter/views/home/lastest.dart' show LastestFeedList;
+import 'package:by_flutter/views/home/tag.dart' show TagFeedList;
 
 class FeedListHomePage extends StatefulWidget {
   FeedListHomePage({Key key, this.title}) : super(key: key);
@@ -18,7 +22,8 @@ class _FeedListHomePageState extends State<FeedListHomePage>
   List tabs = [];
 
   Future getNavigation() async {
-    var response = await $http.get('major-service/major/v1/navigation/select');
+    Response response =
+        await $http.get('major-service/major/v1/navigation/select');
     tabs = response.data['data'].toList();
   }
 
@@ -82,17 +87,34 @@ class _FeedListHomePageState extends State<FeedListHomePage>
                     return Column(
                       children: <Widget>[
                         Expanded(
-                          child: FeedListTabViewContent(type: e['url']),
+                          flex: 0,
+                          child: StoreConnector<AppReduxStore, String>(
+                            converter: (store) => store.state.user.toString(),
+                            builder: (context, counter) {
+                              return Text(counter);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: _FeedListTabViewContent(
+                            type: e['url'] ?? 'index',
+                          ),
                         ),
                       ],
                     );
                   }).toList(),
                 ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    showMessageDialog(context);
+                floatingActionButton: StoreConnector<AppReduxStore, dynamic>(
+                  converter: (store) => store,
+                  builder: (context, store) {
+                    return FloatingActionButton(
+                      onPressed: () {
+                        store.dispatch(
+                            {'module': 'user', 'type': 'counterPlus'});
+                      },
+                      child: Icon(Icons.add),
+                    );
                   },
-                  child: Icon(Icons.add),
                 ),
               );
             }
@@ -120,8 +142,8 @@ class _FeedListHomePageState extends State<FeedListHomePage>
   }
 }
 
-class FeedListTabViewContent extends StatelessWidget {
-  FeedListTabViewContent({Key key, this.type}) : super(key: key);
+class _FeedListTabViewContent extends StatelessWidget {
+  _FeedListTabViewContent({Key key, this.type}) : super(key: key);
   final String type;
   Widget build(BuildContext context) {
     if (type == 'index') {
@@ -130,8 +152,12 @@ class FeedListTabViewContent extends StatelessWidget {
       return FollowFeedList();
     } else if (type == 'lastest') {
       return LastestFeedList();
+    } else if (type == 'tag') {
+      return TagFeedList(
+        tagId: int.parse(type?.substring(4)),
+      );
     } else {
-      return TagFeedList(tagId: int.parse(type.substring(4)));
+      return RecommendsFeedList();
     }
   }
 }

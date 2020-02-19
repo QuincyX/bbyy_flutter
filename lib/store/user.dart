@@ -1,32 +1,42 @@
-import 'package:dio/dio.dart';
-import '../plugins/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+/*
+ * @Date: 2020-02-18 16:13:06
+ * @LastEditors: Quincy
+ * @LastEditTime: 2020-02-19 18:08:11
+ * @Description: redux => user module
+ */
+import 'package:redux/redux.dart';
 
-class StoreUser {
-  static SharedPreferences _prefs;
-  static String jwtToken;
-
-  static Future init() async {
-    _prefs = await SharedPreferences.getInstance();
-    String _jwtToken = _prefs.getString("jwtToken");
-    if (_jwtToken == null) {
-      print("handle get new token");
-      var r = await loginAsVisitor();
-      print(">>>>>> set global token by visitor login =====> ${r.toString()}");
-      _prefs.setString("jwtToken", r);
-    }
-    jwtToken = _jwtToken;
+class UserReduxStore {
+  Map _userReduxStore;
+  get state => _userReduxStore;
+  UserReduxStore.initState() {
+    _userReduxStore = {
+      'nickName': "",
+    };
   }
-
-  static setJwtToken(String newJwtToken) async {
-    if (newJwtToken != null) {
-      print(">>>>>> set global token by response =====> $newJwtToken");
-      jwtToken = newJwtToken;
-    }
-  }
+  UserReduxStore(this._userReduxStore);
 }
 
-loginAsVisitor() async {
-  Response response = await $http.post("user-service/user/v1/visitor/token/");
-  return response.data["data"]["visitorToken"];
+// UserReduxStore reducer(UserReduxStore store, action) {
+//   if (action['type'] == 'nickName') {
+//     store.state['nickName'] = "new nick name";
+//     return UserReduxStore(store.state);
+//   }
+//   return store;
+// }
+
+final userReducer = combineReducers<UserReduxStore>([
+  TypedReducer<UserReduxStore, UpdateUserAction>(updateUser),
+]);
+
+UserReduxStore updateUser(UserReduxStore store, action) {
+  print(">>>>>> store");
+  print(store);
+  store.state['nickName'] = "new nick name";
+  return store;
+}
+
+class UpdateUserAction {
+  String type;
+  dynamic payload;
 }

@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../conponents/feedItemCard.dart';
-import '../../plugins/dio.dart' show $http;
+import 'package:by_flutter/conponents/feedItemCard.dart';
+import 'package:by_flutter/plugins/dio.dart' show $http;
+import 'package:by_flutter/models/user.dart';
 
 class FollowFeedList extends StatefulWidget {
   FollowFeedList({Key key}) : super(key: key);

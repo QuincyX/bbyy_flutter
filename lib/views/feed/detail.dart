@@ -1,7 +1,13 @@
+/*
+ * @Date: 2020-02-18 10:07:58
+ * @LastEditors: Quincy
+ * @LastEditTime: 2020-02-18 18:01:39
+ * @Description: 帖子详情页
+ */
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../views/common/error.dart';
-import '../../plugins/dio.dart' show $http;
+import 'package:by_flutter/views/common/error.dart';
+import 'package:by_flutter/plugins/dio.dart' show $http;
 
 class FeedDetailPage extends StatefulWidget {
   FeedDetailPage({Key key}) : super(key: key);

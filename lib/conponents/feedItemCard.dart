@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
-class User {
-  final String id;
-  final String nickName;
-  final String avatar;
-
-  User({this.id, this.nickName, this.avatar});
-}
+import 'package:by_flutter/models/user.dart' show User;
 
 class FeedItemCard extends StatefulWidget {
   FeedItemCard({
