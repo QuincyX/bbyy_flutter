@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-02-14 17:36:49
  * @LastEditors: Quincy
- * @LastEditTime: 2020-02-19 09:48:18
+ * @LastEditTime: 2020-03-02 20:46:08
  * @Description: http request adapter
  */
 import 'package:dio/dio.dart';
@@ -10,7 +10,7 @@ import '../store/global.dart';
 
 Dio $http = Dio(
   BaseOptions(
-    baseUrl: "http://api.besmile.me/",
+    baseUrl: "http://api.besmile.me/h5-gw/",
     connectTimeout: 5000,
     receiveTimeout: 3000,
     responseType: ResponseType.json,

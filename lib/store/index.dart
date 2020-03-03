@@ -1,30 +1,26 @@
 /*
  * @Date: 2020-02-18 16:13:06
  * @LastEditors: Quincy
- * @LastEditTime: 2020-02-19 18:09:47
+ * @LastEditTime: 2020-02-19 23:27:58
  * @Description: redux => index
  */
-import './user.dart';
 
 class AppReduxStore {
+  AppReduxStore(this._appReduxStore);
   Map _appReduxStore;
-  UserReduxStore _userReduxStore;
 
   get state => _appReduxStore;
-  get global => {'user': _userReduxStore};
-  get user => UserReduxStore.initState();
+  get global => _appReduxStore['global'];
+
   AppReduxStore.initState() {
-    UserReduxStore.initState();
     _appReduxStore = {
-      'user': _userReduxStore,
+      'user': {},
       'global': {
         'counter': 0,
       },
-      'user': {},
       'play': 'stop',
     };
   }
-  AppReduxStore(_appReduxStore);
   static AppReduxStore fromJson(dynamic json) =>
       json != null ? AppReduxStore(json) : AppReduxStore({});
   dynamic toJson() => _appReduxStore;
@@ -32,11 +28,11 @@ class AppReduxStore {
 
 AppReduxStore reducer(AppReduxStore store, action) {
   print(">>>>>> redux action: $action");
-  if (action['module'] == 'user') {
-    return AppReduxStore({'user': userReducer(store.user, action)});
-  }
+  print(store.state);
+  print(store.global);
   if (action['type'] == 'counterPlus') {
-    store.global['counter']++;
+    print(">>>>>> redux action: counterPlus");
+    // store.state['global']['counter']++;
     return AppReduxStore(store.state);
   }
   return store;

@@ -7,8 +7,6 @@ class FeedItemCard extends StatefulWidget {
     Key key,
     this.id,
     this.content,
-    this.video,
-    this.videoPoster,
     this.topicName,
     this.type,
     this.topicId,
@@ -23,12 +21,11 @@ class FeedItemCard extends StatefulWidget {
     this.isDig,
     this.isBury,
     this.user,
+    this.avInfo,
   }) : super(key: key);
 
   final String id;
   final String content;
-  final String video;
-  final String videoPoster;
   final String topicName;
   final int type;
   final int topicId;
@@ -43,6 +40,11 @@ class FeedItemCard extends StatefulWidget {
   final bool isDig;
   final bool isBury;
   final User user;
+  Map avInfo = {
+    "key": '',
+    "height": 0,
+    "width": 0,
+  };
 
   @override
   FeedItemCardState createState() => FeedItemCardState();
@@ -59,7 +61,7 @@ class FeedItemCardState extends State<FeedItemCard> {
     _digCount = widget.digCount;
 
     _videoController = VideoPlayerController.network(
-        'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')
+        'http://benyuan.besmile.me/' + widget.avInfo['key'])
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
@@ -152,10 +154,39 @@ class FeedItemCardState extends State<FeedItemCard> {
               ),
             ),
           ),
+          // Container(
+          //   child: Offstage(
+          //     offstage: widget.type == 2,
+          //     child: Image(
+          //       image: NetworkImage(widget.imageList[0]),
+          //     ),
+          //   ),
+          // ),
           Container(
-            child: Image(
-              image: NetworkImage(widget.videoPoster),
+            height: 300,
+            decoration: BoxDecoration(
+              border: Border.all(),
             ),
+            child: _videoController.value.initialized
+                ? Container(
+                    height: 300,
+                    child: GestureDetector(
+                      onTap: () {
+                        _videoController.value.isPlaying
+                            ? _videoController.pause()
+                            : _videoController.play();
+                      },
+                      child: VideoPlayer(_videoController),
+                    ),
+                  )
+                : Container(
+                    height: 500,
+                    child: Image(
+                      image: NetworkImage('http://benyuan.besmile.me/' +
+                          widget.avInfo['key'] +
+                          '?vframe/jpg/offset/2'),
+                    ),
+                  ),
           ),
           Flex(
             direction: Axis.horizontal,
@@ -229,97 +260,97 @@ class FeedItemCardState extends State<FeedItemCard> {
   }
 }
 
-class FeedItemCardContent extends StatefulWidget {
-  FeedItemCardContent({
-    Key key,
-    this.type,
-    this.videoPoster,
-    this.video,
-    this.imageList,
-  }) : super(key: key);
+// class FeedItemCardContent extends StatefulWidget {
+//   FeedItemCardContent({
+//     Key key,
+//     this.type,
+//     this.videoPoster,
+//     this.video,
+//     this.imageList,
+//   }) : super(key: key);
 
-  final int type;
-  final String videoPoster;
-  final String video;
-  final List imageList;
-  @override
-  _FeedItemCardContentState createState() => _FeedItemCardContentState();
-}
+//   final int type;
+//   final String videoPoster;
+//   final String video;
+//   final List imageList;
+//   @override
+//   _FeedItemCardContentState createState() => _FeedItemCardContentState();
+// }
 
-class _FeedItemCardContentState extends State<FeedItemCardContent> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.type == 3) {
-      return Container(
-        child: Image(
-          image: NetworkImage(widget.videoPoster),
-        ),
-      );
-    } else if (widget.type == 2) {
-      if (widget.imageList.length == 1) {
-        return Container(
-          child: Image(
-            image: NetworkImage(widget.imageList[0]),
-          ),
-        );
-      } else if (widget.imageList.length == 2) {
-        return Row(
-          children: <Widget>[
-            Image(
-              image: NetworkImage(widget.imageList[0]),
-            ),
-            Image(
-              image: NetworkImage(widget.imageList[1]),
-            ),
-          ],
-        );
-      } else {
-        // return Flow(
-        //   delegate: TestFlowDelegate(margin: EdgeInsets.all(10.0)),
-        //   children: widget.imageList.map((e) {
-        //     return Image(
-        //       image: NetworkImage(e),
-        //     );
-        //   }).toList(),
-        // );
-      }
-    }
-  }
-}
+// class _FeedItemCardContentState extends State<FeedItemCardContent> {
+//   @override
+//   Widget build(BuildContext context) {
+//     if (widget.type == 3) {
+//       return Container(
+//         child: Image(
+//           image: NetworkImage(widget.videoPoster),
+//         ),
+//       );
+//     } else if (widget.type == 2) {
+//       if (widget.imageList.length == 1) {
+//         return Container(
+//           child: Image(
+//             image: NetworkImage(widget.imageList[0]),
+//           ),
+//         );
+//       } else if (widget.imageList.length == 2) {
+//         return Row(
+//           children: <Widget>[
+//             Image(
+//               image: NetworkImage(widget.imageList[0]),
+//             ),
+//             Image(
+//               image: NetworkImage(widget.imageList[1]),
+//             ),
+//           ],
+//         );
+//       } else {
+//         // return Flow(
+//         //   delegate: TestFlowDelegate(margin: EdgeInsets.all(10.0)),
+//         //   children: widget.imageList.map((e) {
+//         //     return Image(
+//         //       image: NetworkImage(e),
+//         //     );
+//         //   }).toList(),
+//         // );
+//       }
+//     }
+//   }
+// }
 
-class TestFlowDelegate extends FlowDelegate {
-  EdgeInsets margin = EdgeInsets.zero;
-  TestFlowDelegate({this.margin});
-  @override
-  void paintChildren(FlowPaintingContext context) {
-    var x = margin.left;
-    var y = margin.top;
-    //计算每一个子widget的位��
-    for (int i = 0; i < context.childCount; i++) {
-      var w = context.getChildSize(i).width + x + margin.right;
-      if (w < context.size.width) {
-        context.paintChild(i,
-            transform: new Matrix4.translationValues(x, y, 0.0));
-        x = w + margin.left;
-      } else {
-        x = margin.left;
-        y += context.getChildSize(i).height + margin.top + margin.bottom;
-        //绘制子widget(有优化)
-        context.paintChild(i,
-            transform: new Matrix4.translationValues(x, y, 0.0));
-        x += context.getChildSize(i).width + margin.left + margin.right;
-      }
-    }
-  }
+// class TestFlowDelegate extends FlowDelegate {
+//   EdgeInsets margin = EdgeInsets.zero;
+//   TestFlowDelegate({this.margin});
+//   @override
+//   void paintChildren(FlowPaintingContext context) {
+//     var x = margin.left;
+//     var y = margin.top;
+//     //计算每一个子widget的位��
+//     for (int i = 0; i < context.childCount; i++) {
+//       var w = context.getChildSize(i).width + x + margin.right;
+//       if (w < context.size.width) {
+//         context.paintChild(i,
+//             transform: new Matrix4.translationValues(x, y, 0.0));
+//         x = w + margin.left;
+//       } else {
+//         x = margin.left;
+//         y += context.getChildSize(i).height + margin.top + margin.bottom;
+//         //绘制子widget(有优化)
+//         context.paintChild(i,
+//             transform: new Matrix4.translationValues(x, y, 0.0));
+//         x += context.getChildSize(i).width + margin.left + margin.right;
+//       }
+//     }
+//   }
 
-  @override
-  getSize(BoxConstraints constraints) {
-    //指定Flow的大小
-    return Size(double.infinity, 200.0);
-  }
+//   @override
+//   getSize(BoxConstraints constraints) {
+//     //指定Flow的大小
+//     return Size(double.infinity, 200.0);
+//   }
 
-  @override
-  bool shouldRepaint(FlowDelegate oldDelegate) {
-    return oldDelegate != this;
-  }
-}
+//   @override
+//   bool shouldRepaint(FlowDelegate oldDelegate) {
+//     return oldDelegate != this;
+//   }
+// }
