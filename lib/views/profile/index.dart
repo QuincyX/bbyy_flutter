@@ -1,17 +1,17 @@
 /*
  * @Date: 2020-02-18 10:07:58
  * @LastEditors: Quincy
- * @LastEditTime: 2020-03-03 20:57:43
+ * @LastEditTime: 2020-03-04 09:56:32
  * @Description: 帖子详情页
  */
 import 'package:dio/dio.dart';
 import 'package:by_flutter/plugins/dio.dart' show $http;
 import 'package:flutter/material.dart';
 
+import 'package:by_flutter/components/navigationBar.dart';
+import 'package:by_flutter/components/feedItemCard.dart';
 import 'package:by_flutter/views/common/error.dart';
 import 'package:by_flutter/views/common/loading.dart';
-import 'package:by_flutter/views/common/navigationBar.dart';
-import 'package:by_flutter/conponents/feedItemCard.dart';
 import 'package:by_flutter/models/user.dart';
 
 class ProfileHomePage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _State extends State<ProfileHomePage> {
           return CommonLoadingPage();
         } else {
           if (snapshot.hasError) {
-            return ErrorMessagePage(
+            return CommonErrorPage(
               text: snapshot.error.toString(),
             );
           } else {
@@ -48,7 +48,9 @@ class _State extends State<ProfileHomePage> {
               appBar: AppBar(
                 title: Text("帖子详情"),
               ),
-              bottomNavigationBar: NavigationBar(),
+              bottomNavigationBar: NavigationBar(
+                currentIndex: 3,
+              ),
               body: Column(
                 children: <Widget>[
                   Expanded(

@@ -33,7 +33,7 @@ class _FeedDetailPageState extends State<FeedDetailPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           if (snapshot.hasError) {
-            return ErrorMessagePage(
+            return CommonErrorPage(
               text: snapshot.error.toString(),
             );
           } else {

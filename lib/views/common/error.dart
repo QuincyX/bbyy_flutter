@@ -6,8 +6,8 @@
  */
 import 'package:flutter/material.dart';
 
-class ErrorMessagePage extends StatelessWidget {
-  ErrorMessagePage({Key key, this.text}) : super(key: key);
+class CommonErrorPage extends StatelessWidget {
+  CommonErrorPage({Key key, this.text}) : super(key: key);
   final String text;
   @override
   Widget build(BuildContext context) {

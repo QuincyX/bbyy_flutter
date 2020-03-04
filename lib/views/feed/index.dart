@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:by_flutter/conponents/feedItemCard.dart';
 import 'package:by_flutter/plugins/dio.dart';
+
+import 'package:by_flutter/components/feedItemCard.dart';
+import 'package:by_flutter/components/navigationBar.dart';
 import 'package:by_flutter/models/user.dart';
 import 'package:by_flutter/views/common/error.dart';
 import 'package:by_flutter/views/common/loading.dart';
@@ -31,13 +33,16 @@ class _RecommendsListState extends State<RecommendsFeedList> {
           return CommonLoadingPage(text: "加载中...");
         } else {
           if (snapshot.hasError) {
-            return ErrorMessagePage(
+            return CommonErrorPage(
               text: snapshot.error.toString(),
             );
           } else {
             return Scaffold(
               appBar: AppBar(
                 title: Text("广场"),
+              ),
+              bottomNavigationBar: NavigationBar(
+                currentIndex: 2,
               ),
               body: Column(
                 children: <Widget>[

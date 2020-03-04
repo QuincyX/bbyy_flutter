@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 class NavigationBar extends StatefulWidget {
+  NavigationBar({
+    Key key,
+    this.currentIndex,
+  }) : super(key: key);
+
+  final int currentIndex;
+
   @override
   _State createState() => _State();
 }
 
 class _State extends State<NavigationBar> {
-  int _currentIndex = 0;
+  int _currentIndex;
   List _navigationList = [
     {'name': "首页", 'icon': Icon(Icons.home), 'page': '/home/index'},
     {'name': "消息", 'icon': Icon(Icons.message), 'page': '/message/index'},
@@ -14,11 +21,17 @@ class _State extends State<NavigationBar> {
     {'name': "我", 'icon': Icon(Icons.person), 'page': '/profile/index'},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.currentIndex ?? 0;
+  }
+
   void _onNavigationTap(int index) {
     setState(() {
       _currentIndex = index;
     });
-    Navigator.pushNamed(context, _navigationList[index]['page']);
+    Navigator.pushReplacementNamed(context, _navigationList[index]['page']);
   }
 
   @override

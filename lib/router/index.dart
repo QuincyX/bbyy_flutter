@@ -6,6 +6,7 @@ import '../views/profile/index.dart' show ProfileHomePage;
 
 final routes = <String, WidgetBuilder>{
   "/": (context) => FeedListHomePage(title: 'BY live demo home page'),
+  "/home/index": (context) => FeedListHomePage(title: 'BY live demo home page'),
   "/feed/index": (context) => RecommendsFeedList(),
   "/feed/detail": (context) => FeedDetailPage(),
   "/message/index": (context) => RecommendsFeedList(),
